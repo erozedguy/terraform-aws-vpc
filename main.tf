@@ -105,26 +105,26 @@ resource "aws_security_group" "sec_groups" {
   vpc_id      = aws_vpc.custom_vpc.id
 
   dynamic "ingress" {
-    for_each = { for ingress in var.security_groups : ingress.ingress.from_port => ingress }
+    for_each = try(each.value.ingress, [])
     content {
-      description      = ingress.value.ingress.description
-      from_port        = ingress.value.ingress.from_port
-      to_port          = ingress.value.ingress.to_port
-      protocol         = ingress.value.ingress.protocol
-      cidr_blocks      = ingress.value.ingress.cidr_blocks
-      ipv6_cidr_blocks = ingress.value.ingress.ipv6_cidr_blocks
+      description      = ingress.value.description
+      from_port        = ingress.value.from_port
+      to_port          = ingress.value.to_port
+      protocol         = ingress.value.protocol
+      cidr_blocks      = ingress.value.cidr_blocks
+      ipv6_cidr_blocks = ingress.value.ipv6_cidr_blocks
     }
   }
 
   dynamic "egress" {
-    for_each = { for egress in var.security_groups : egress.egress.from_port => egress }
+    for_each = try(each.value.egress, [])
     content {
-      description      = egress.value.egress.description
-      from_port        = egress.value.egress.from_port
-      to_port          = egress.value.egress.to_port
-      protocol         = egress.value.egress.protocol
-      cidr_blocks      = egress.value.egress.cidr_blocks
-      ipv6_cidr_blocks = egress.value.egress.ipv6_cidr_blocks
+      description      = egress.value.description
+      from_port        = egress.value.from_port
+      to_port          = egress.value.to_port
+      protocol         = egress.value.protocol
+      cidr_blocks      = egress.value.cidr_blocks
+      ipv6_cidr_blocks = egress.value.ipv6_cidr_blocks
     }
   }
 }
